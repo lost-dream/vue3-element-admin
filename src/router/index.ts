@@ -21,6 +21,13 @@ const constantRoutes: Array<RouteRecordRaw> = [
     meta: {
       hidden: true
     }
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/login/auth-redirect.vue'),
+    meta: {
+      hidden: true
+    }
   }
 ]
 

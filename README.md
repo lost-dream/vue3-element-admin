@@ -1,29 +1,17 @@
-# vue3-element-admin
+# ts 混合 interface 定义
 
-## Project setup
-```
-npm install
-```
+```typescript
+interface UserForm {
+  username: string
+  password: string
+}
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+type keys = keyof UserForm
 
-### Compiles and minifies for production
+interface State {
+  loginForm: UserForm
+  loginRules: {
+    [K in keys]: [{ required: boolean; trigger: 'blur'; validator: Function }]
+  }
+}
 ```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
