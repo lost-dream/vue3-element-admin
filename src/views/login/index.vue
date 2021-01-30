@@ -2,8 +2,7 @@
   <!-- TODO 显示隐藏密码效果优化 -->
   <div class="login-container">
     <el-form ref="loginFormWrapper" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">Login Form</h3>
-
+      <h3 class="title">{{ $t('login.title') }}</h3>
       <el-form-item prop="username">
         <el-input
           ref="username"
@@ -16,17 +15,13 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+      <el-tooltip v-model="capsTooltip" :content="$t('login.capsLock')" placement="right" manual>
         <el-form-item prop="password">
           <el-input
-            :key="passwordType"
             ref="password"
             v-model="loginForm.password"
             :type="passwordType"
             placeholder="Password"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
             @keydown="checkCapsLock"
             @blur="capsTooltip = false"
             @keyup.enter="handleLogin"
@@ -42,24 +37,31 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin-bottom:30px;"
-        @click.prevent="handleLogin"
-        >Login</el-button
-      >
+      <el-button class="login" :loading="loading" type="primary" @click="handleLogin">
+        Login
+      </el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+      <footer>
+        <div class="tips-wrapper">
+          <div class="tips">
+            <span>{{ $t('login.adminAccount') }}</span>
+            <span>{{ $t('login.adminPwd') }}</span>
+          </div>
+          <div class="tips">
+            <span>{{ $t('login.editorAccount') }}</span>
+            <span>{{ $t('login.editorPwd') }}</span>
+          </div>
         </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-      </div>
+        <el-select size="small" class="lang" v-model="$i18n.locale">
+          <el-option
+            v-for="locale in $i18n.availableLocales"
+            :key="`locale-${locale}`"
+            :label="locale"
+            value-key="locale"
+            :value="locale"
+          />
+        </el-select>
+      </footer>
     </el-form>
   </div>
 </template>
@@ -69,6 +71,7 @@ import { defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue'
 import { useStore } from '@/store'
 import { validUsername } from '@/utils/validate'
 import { LocationQueryValue, LocationQuery, useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 interface Form {
   username: string
@@ -96,10 +99,11 @@ export default defineComponent({
     const store = useStore()
     const route = useRoute()
     const router = useRouter()
+    const { t } = useI18n()
 
     const validateUsername = (rule: Function, value: string, callback: Function) => {
       if (!validUsername(value)) {
-        callback(new Error('please enter the correct user name'))
+        callback(new Error(t('login.accountErrMsg')))
       } else {
         callback()
       }
@@ -107,7 +111,7 @@ export default defineComponent({
 
     const validatePassword = (rule: Function, value: string, callback: Function) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error(t('login.pwdErrMsg')))
       } else {
         callback()
       }
@@ -134,7 +138,6 @@ export default defineComponent({
     })
 
     const checkCapsLock = function(e: KeyboardEvent) {
-      console.log('e :>> ', e.key)
       const { key } = e
       state.capsTooltip = Boolean(key && key.length === 1 && key >= 'A' && key <= 'Z')
     }
@@ -211,54 +214,64 @@ export default defineComponent({
   width: 100%;
   background-color: #283443;
   overflow: hidden;
-  ::v-deep .el-input {
-    input {
-      background: transparent;
-      border: 0px;
-      padding: 12px 15px 12px 15px;
-      color: #eee;
-      height: 47px;
-    }
-    .el-input-group__prepend,
-    .el-input-group__append {
-      background: transparent;
-      border: 0px;
-    }
+
+  .title {
+    font-size: 26px;
+    color: #eee;
+    margin: 0px auto 40px auto;
+    text-align: center;
+  }
+
+  .login-form {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
   }
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-  }
-}
-
-.login-form {
-  position: relative;
-  width: 520px;
-  max-width: 100%;
-  padding: 160px 35px 0;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.tips {
-  font-size: 14px;
-  color: #fff;
-  margin-bottom: 10px;
-  text-align: center;
-
-  span {
-    &:first-of-type {
-      margin-right: 16px;
+    ::v-deep .el-input {
+      input {
+        background: transparent;
+        border: 0px;
+        padding: 12px 15px 12px 15px;
+        color: #eee;
+        height: 47px;
+      }
+      .el-input-group__prepend,
+      .el-input-group__append {
+        background: transparent;
+        border: 0px;
+      }
     }
   }
-}
 
-.title {
-  font-size: 26px;
-  color: #eee;
-  margin: 0px auto 40px auto;
-  text-align: center;
+  .login {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  footer {
+    display: flex;
+    .tips-wrapper {
+      flex: 1;
+    }
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
 }
 </style>
