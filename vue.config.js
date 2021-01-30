@@ -2,6 +2,9 @@
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const env = process.env
+const port = process.env.port || process.env.npm_config_port
+
+console.log('port :>> ', port)
 
 module.exports = {
   publicPath: env.NODE_ENV === 'production' ? './' : '/',
@@ -30,5 +33,10 @@ module.exports = {
       // 显示包文件分析
       config.plugin('webpack-bundle-analyzer').use(BundleAnalyzerPlugin)
     }
+  },
+  devServer: {
+    host: '0.0.0.0',
+    disableHostCheck: true,
+    before: require('./mock/mock-server.js')
   }
 }

@@ -235,7 +235,7 @@ export default defineComponent({
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    ::v-deep .el-input {
+    ::v-deep(.el-input) {
       input {
         background: transparent;
         border: 0px;
