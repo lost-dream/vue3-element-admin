@@ -5,12 +5,16 @@ import { AllState } from './interface'
 import createPersistedState from 'vuex-persistedstate'
 import layout from './modules/layout'
 import user from './modules/user'
+import app from './modules/app'
+import permission from './modules/permission'
 
 export default createStore<AllState>({
   getters: getters,
   modules: {
     layout,
-    user
+    user,
+    app,
+    permission
   },
   plugins: [
     createPersistedState({

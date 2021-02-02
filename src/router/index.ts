@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout'
 
-const constantRoutes: Array<RouteRecordRaw> = [
+export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/redirect',
     component: Layout,
@@ -42,6 +42,34 @@ const constantRoutes: Array<RouteRecordRaw> = [
     meta: {
       hidden: true
     }
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'el-icon-house', affix: true }
+      }
+    ]
+  }
+]
+
+export const asyncRoutes: Array<RouteRecordRaw> = [
+  {
+    path: '/icon',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/icons/index'),
+        name: 'Icons',
+        meta: { title: 'Icons', icon: 'el-icon-warning-outline', noCache: true }
+      }
+    ]
   }
 ]
 
