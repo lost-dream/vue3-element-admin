@@ -53,6 +53,7 @@
     "sass": "^1.27.0",
     "sass-loader": "^10.0.4",
     "sass-resources-loader": "^2.1.1",
+    "svg-sprite-loader": "^5.2.1",
     "typescript": "~3.9.3",
     "vue-cli-plugin-element-plus": "~0.0.13",
     "vue-jest": "^5.0.0-0",

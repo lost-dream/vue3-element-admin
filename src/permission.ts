@@ -33,7 +33,6 @@ router.beforeEach(async (to, from) => {
 
           const routes = store.state.permission.routes
           for (let i = 0; i < routes.length; i++) {
-            console.log('object :>> ', routes[i])
             router.addRoute(routes[i])
           }
         } catch (error) {

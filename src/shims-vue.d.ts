@@ -8,3 +8,4 @@ declare module '*.vue' {
 declare module '@/*'
 declare module './modules*'
 declare module '@scss/*'
+declare module 'clipboard'

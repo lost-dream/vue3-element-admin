@@ -1,14 +1,8 @@
 <template>
   <div class="icons-container">
-    <aside>
-      <a
-        href="https://panjiachen.github.io/vue-element-admin-site/guide/advanced/icon.html"
-        target="_blank"
-        >Add and use
-      </a>
-    </aside>
+    <aside><a href="javaScript:void(0);">Add and use </a></aside>
     <el-tabs type="border-card">
-      <el-tab-pane label="Icons">
+      <el-tab-pane label="Svg Icons">
         <div class="grid">
           <div
             v-for="item of svgIcons"
@@ -30,7 +24,7 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="Element-UI Icons">
+      <el-tab-pane label="ElementUI Icons">
         <div class="grid">
           <div
             v-for="item of elementIcons"

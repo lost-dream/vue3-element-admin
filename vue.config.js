@@ -2,18 +2,19 @@
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const env = process.env
-const port = process.env.port || process.env.npm_config_port
 
-console.log('port :>> ', port)
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
 
 module.exports = {
   publicPath: env.NODE_ENV === 'production' ? './' : '/',
   chainWebpack: config => {
     config.resolve.alias
-      .set('@', path.resolve('./src'))
-      .set('@comp', path.resolve('./src/components'))
-      .set('@scss', path.resolve('./src/assets/scss'))
-      .set('@img', path.resolve('./src/assets/images'))
+      .set('@', resolve('./src'))
+      .set('@comp', resolve('./src/components'))
+      .set('@scss', resolve('./src/assets/scss'))
+      .set('@img', resolve('./src/assets/images'))
 
     // sass 文件全局提升
     config.module
@@ -23,9 +24,26 @@ module.exports = {
       .loader('sass-resources-loader')
       .options({
         resources: [
-          path.resolve(__dirname, 'src/assets/scss/variables.scss'),
-          path.resolve(__dirname, 'src/assets/scss/mixins.scss')
+          resolve('src/assets/scss/variables.scss'),
+          resolve('src/assets/scss/mixins.scss')
         ]
+      })
+      .end()
+
+    // set svg-sprite-loader
+    config.module
+      .rule('svg')
+      .exclude.add(resolve('src/icons'))
+      .end()
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/icons'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
       })
       .end()
 
