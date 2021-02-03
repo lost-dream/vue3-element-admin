@@ -7,6 +7,7 @@ import layout from './modules/layout'
 import user from './modules/user'
 import app from './modules/app'
 import permission from './modules/permission'
+import settings from './modules/settings'
 
 export default createStore<AllState>({
   getters: getters,
@@ -14,7 +15,8 @@ export default createStore<AllState>({
     layout,
     user,
     app,
-    permission
+    permission,
+    settings
   },
   plugins: [
     createPersistedState({
