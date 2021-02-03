@@ -15,7 +15,7 @@ export default {
       required: true
     }
   },
-  setup(props) {
+  setup(props: any) {
     const isExternal = computed(() => IsExternal(props.to))
     const type = computed(() => {
       if (isExternal.value) {

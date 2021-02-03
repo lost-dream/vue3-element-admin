@@ -1,22 +1,15 @@
 <template>
   <sidebar />
-  <div class="layout-main flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-    <div
-      class="layout-main-navbar flex justify-between items-center h-12 shadow-sm border-b border-gray-100"
-    >
-      <layout-navbar />
-    </div>
-    <div
-      class="layout-main-tags h-10 leading-10 overflow-hidden shadow text-sm text-gray-600 px-3 position"
-    >
-      <layout-tags />
-    </div>
-    <div class="layout-main-content flex-1 overflow-hidden">
-      <layout-content />
-    </div>
-  </div>
-  <div class="layout-sidebar-theme fixed right-0 top-64 z-10">
-    <layout-Theme />
+
+  <div :class="{ hasTagsView: needTagsView }" class="main-container">
+    <!-- <div :class="{ 'fixed-header': fixedHeader }">
+      <navbar />
+      <tags-view v-if="needTagsView" />
+    </div> -->
+    <layout-content />
+    <!-- <right-panel v-if="showSettings">
+      <settings />
+    </right-panel> -->
   </div>
 </template>
 
@@ -34,10 +27,10 @@ export default defineComponent({
   name: 'Layout',
   components: {
     LayoutContent,
-    Sidebar,
-    LayoutNavbar,
-    LayoutTags,
-    LayoutTheme
+    Sidebar
+    // LayoutNavbar,
+    // LayoutTags,
+    // LayoutTheme
   },
   setup() {
     const store = useStore()
@@ -65,5 +58,11 @@ export default defineComponent({
 .app-wrapper {
   position: relative;
   @include cube();
+}
+.main-container {
+  min-height: 100%;
+  transition: margin-left 0.28s;
+  margin-left: $sideBarWidth;
+  position: relative;
 }
 </style>

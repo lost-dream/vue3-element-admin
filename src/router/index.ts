@@ -67,7 +67,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         path: 'index',
         component: () => import('@/views/icons/index'),
         name: 'Icons',
-        meta: { title: 'Icons', icon: 'el-icon-warning-outline', noCache: true }
+        meta: { title: 'Icons', icon: 'el-icon-warning-outline', affix: true }
       }
     ]
   }

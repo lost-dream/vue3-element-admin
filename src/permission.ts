@@ -1,48 +1,62 @@
 import router from '@/router'
 import store from '@/store/index'
+import { constantRoutes } from '@/router'
+import { RouteRecordRaw } from 'vue-router'
 import { configure, start, done } from 'nprogress'
+import 'nprogress/nprogress.css' // progress bar style
+import { getToken } from '@/utils/auth' // get token fro
 
 configure({ showSpinner: false })
 
-const loginRoutePath = '/login'
-const defaultRoutePath = '/'
+const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async (to, from) => {
   start()
-  const { user } = store.state
 
-  // 判断当前是否在登陆页面
-  if (to.path.toLocaleLowerCase() === loginRoutePath.toLocaleLowerCase()) {
-    done()
-    if (user.token) return defaultRoutePath
-    return
-  }
-  // // 判断是否登录
-  if (!user.token) {
-    return loginRoutePath
-  }
-  document.title = document.title
-    ? document.title.split(' |')[0] + ' | ' + to.meta.title
-    : to.meta.title
-  // // 判断是否还没添加过路由
-  // if (layout.menubar.menuList.length === 0) {
-  //   await store.dispatch('layout/GenerateRoutes')
-  //   await store.dispatch('layout/getUser')
-  //   for (let i = 0; i < layout.menubar.menuList.length; i++) {
-  //     router.addRoute(layout.menubar.menuList[i])
-  //   }
-  //   store.commit('layout/concatAllowRoutes')
-  //   return to.fullPath
-  // }
-  const { roles } = await store.dispatch('user/getInfo')
-  const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-  store.commit('layout/changeTagNavList', to) // 切换导航，记录打开的导航(标签页)
+  const hasToken = getToken()
 
-  // 离开当前页面时是否需要添加当前页面缓存
-  !new RegExp(/^\/redirect\//).test(from.path) &&
-    store.state.layout.tags.tagsList.some(v => v.name === from.name) &&
-    !store.state.layout.tags.cachedViews.some(v => v === from.name) &&
-    store.commit('layout/addCachedViews', { name: from.name, noCache: from.meta.noCache })
+  console.log('to,form :>> ', to, from)
+  if (hasToken) {
+    if (to.path === '/login') {
+      done()
+      router.push({ path: '/' })
+    } else {
+      const hasRoles = store.getters.roles
+      console.log('hasRoles :>> ', hasRoles)
+      if (hasRoles) {
+        return true
+      } else {
+        try {
+          const { roles } = await store.dispatch('user/getInfo')
+          console.log('roles :>> ', roles)
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+
+          const routes = store.state.permission.routes
+          for (let i = 0; i < routes.length; i++) {
+            console.log('object :>> ', routes[i])
+            router.addRoute(routes[i])
+          }
+        } catch (error) {
+          console.log('error :>> ', error)
+          done()
+          return false
+        }
+      }
+    }
+  } else {
+    if (whiteList.includes(to.path)) {
+      done()
+      return false
+    } else {
+      done()
+      router.push({
+        name: 'Login',
+        query: {
+          redirect: to.path
+        }
+      })
+    }
+  }
 })
 
 router.afterEach(() => {
