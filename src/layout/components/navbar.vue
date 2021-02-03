@@ -1,100 +1,147 @@
 <template>
-  <div class="flex items-center px-4">
-    <span
-      class="text-2xl cursor-pointer"
-      :class="{ 'el-icon-s-fold': !menubar.status, 'el-icon-s-unfold': menubar.status }"
-      @click="changeCollapsed"
+  <div class="navbar">
+    <hamburger
+      id="hamburger-container"
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
     />
-    <!-- 面包屑导航 -->
-    <div class="px-4">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">
-          主页
-        </el-breadcrumb-item>
-        <el-breadcrumb-item v-for="v in data.breadcrumbList" :key="v.path" :to="v.path">
-          {{ v.title }}
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-  </div>
-  <div class="flex items-center flex-row-reverse px-4 min-width-32">
-    <el-dropdown>
-      <span class="el-dropdown-link">
-        {{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item>
-            <el-link href="https://github.com/hsiangleev" target="_blank" :underline="false">
-              个人中心
-            </el-link>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <el-link
-              href="https://github.com/hsiangleev/element-plus-admin"
-              target="_blank"
-              :underline="false"
-            >
-              项目地址
-            </el-link>
-          </el-dropdown-item>
-          <el-dropdown-item divided @click="logout">
-            退出登录
-          </el-dropdown-item>
-        </el-dropdown-menu>
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <div class="right-menu">
+      <template v-if="device !== 'mobile'">
+        <search id="header-search" class="right-menu-item" />
+        <error-log class="errLog-container right-menu-item hover-effect" />
+        <screenfull id="screenfull" class="right-menu-item hover-effect" />
       </template>
-    </el-dropdown>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from 'vue'
-import { useStore } from '@/store/index'
-import { useRoute, RouteLocationNormalizedLoaded } from 'vue-router'
-
-interface BreadcrumbList {
-  path: string
-  title: string | symbol
-}
-// 面包屑导航
-const breadcrumb = (route: RouteLocationNormalizedLoaded) => {
-  const fn = () => {
-    const breadcrumbList: Array<BreadcrumbList> = []
-    if (route.matched[0] && route.matched[0].name === 'Dashboard') return breadcrumbList
-    route.matched.forEach(v => {
-      const obj: BreadcrumbList = {
-        title: v.meta.title,
-        path: v.path
-      }
-      breadcrumbList.push(obj)
-    })
-    return breadcrumbList
-  }
-  const data = reactive({
-    breadcrumbList: fn()
-  })
-  watch(
-    () => route.path,
-    () => (data.breadcrumbList = fn())
-  )
-  return data
-}
+import { computed, defineComponent } from 'vue'
+import { useStore } from '@/store'
+import { useRouter, useRoute } from 'vue-router'
+import Hamburger from '@/components/Hamburger'
+import Breadcrumb from '@/components/Breadcrumb'
+import Search from '@/components/HeaderSearch'
+import ErrorLog from '@/components/ErrorLog'
+import Screenfull from '@/components/Screenfull'
 
 export default defineComponent({
   name: 'LayoutNavbar',
+  components: {
+    Hamburger,
+    Breadcrumb,
+    Search,
+    ErrorLog,
+    Screenfull
+  },
   setup() {
     const store = useStore()
     const route = useRoute()
-    const changeCollapsed = () => store.commit('layout/changeCollapsed')
-    const logout = () => store.commit('layout/logout')
-    const data = breadcrumb(route)
+    const router = useRouter()
+
+    const sidebar = computed(() => store.getters.sidebar)
+    const avatar = computed(() => store.getters.avatar)
+    const device = computed(() => store.getters.device)
+
+    function toggleSideBar() {
+      store.dispatch('app/toggleSideBar')
+    }
+
+    async function logout() {
+      await store.dispatch('user/logout')
+      router.push({
+        name: 'Login',
+        query: {
+          redirect: route.fullPath
+        }
+      })
+    }
     return {
-      menubar: store.state.layout.menubar,
-      userInfo: store.state.layout.userInfo,
-      changeCollapsed,
-      logout,
-      data
+      sidebar,
+      avatar,
+      device,
+      toggleSideBar,
+      logout
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.navbar {
+  height: 50px;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  .hamburger-container {
+    line-height: 46px;
+    height: 100%;
+    float: left;
+    cursor: pointer;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+  }
+
+  .breadcrumb-container {
+    float: left;
+  }
+
+  .right-menu {
+    float: right;
+    height: 100%;
+    line-height: 50px;
+
+    &:focus {
+      outline: none;
+    }
+
+    .right-menu-item {
+      display: inline-block;
+      padding: 0 8px;
+      height: 100%;
+      font-size: 18px;
+      color: #5a5e66;
+      vertical-align: text-bottom;
+
+      &.hover-effect {
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.025);
+        }
+      }
+    }
+
+    .avatar-container {
+      margin-right: 30px;
+
+      .avatar-wrapper {
+        margin-top: 5px;
+        position: relative;
+
+        .user-avatar {
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+        }
+
+        .el-icon-caret-bottom {
+          cursor: pointer;
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+</style>

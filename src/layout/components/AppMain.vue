@@ -1,30 +1,23 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
-        <router-view :key="key" />
-      </keep-alive>
-    </transition>
+    <router-view v-slot="{ Component }">
+      <transition name="fade-transform" mode="out-in">
+        <keep-alive :include="cachedViews">
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
   </section>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useStore } from '@/store'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LayoutContent',
   setup() {
-    const route = useRoute()
-    const store = useStore()
-
-    const key = computed(() => route.path)
-    // const cachedViews = store.state.tagsView.cachedViews
-
     return {
-      key,
-      cachedViews: []
+      cachedViews: [] // TODO 改成 store 中取 tagsView.cachedViews
     }
   }
 })

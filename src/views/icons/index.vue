@@ -63,7 +63,6 @@ export default {
       svgIcons,
       elementIcons
     })
-    console.log('svgIcons :>> ', svgIcons)
 
     const methods = {
       generateIconCode(symbol: string) {

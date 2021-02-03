@@ -3,6 +3,7 @@ import UserState from './modules/user/interface'
 import AppState from './modules/app/interface'
 import PermissionState from './modules/permission/interface'
 import SettingState from './modules/settings/interface'
+import ErrorLogState from './modules/errorLog/interface'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export default interface RootState {}
@@ -25,4 +26,8 @@ export interface AllState extends RootState {
 
 export interface AllState extends RootState {
   settings: SettingState
+}
+
+export interface AllState extends RootState {
+  errorLog: ErrorLogState
 }

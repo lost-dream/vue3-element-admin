@@ -8,6 +8,7 @@ import user from './modules/user'
 import app from './modules/app'
 import permission from './modules/permission'
 import settings from './modules/settings'
+import errorLog from '@/components/ErrorLog'
 
 export default createStore<AllState>({
   getters: getters,
@@ -16,7 +17,8 @@ export default createStore<AllState>({
     user,
     app,
     permission,
-    settings
+    settings,
+    errorLog
   },
   plugins: [
     createPersistedState({
