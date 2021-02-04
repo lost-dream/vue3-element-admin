@@ -117,6 +117,10 @@ export default defineComponent({
   margin-left: -2px;
 }
 
+::v-deep(.svg-icon) {
+  margin-right: 16px;
+}
+
 a {
   display: inline-block;
   width: 100%;

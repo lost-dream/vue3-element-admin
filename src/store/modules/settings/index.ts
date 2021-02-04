@@ -6,7 +6,8 @@ import defaultSettings from '@/settings'
 
 const { showSettings, tagsView, fixedHeader, sidebarLogo } = defaultSettings
 
-const settingsModule: Module<SettingState, RootState> = {
+// const settingsModule: Module<SettingState, RootState> = {
+const settingsModule: any = {
   namespaced: true,
   state: {
     theme: variables.theme,
@@ -16,7 +17,7 @@ const settingsModule: Module<SettingState, RootState> = {
     sidebarLogo: sidebarLogo
   },
   mutations: {
-    CHANGE_SETTING: (state: { [index: string]: any }, { key, value }) => {
+    CHANGE_SETTING: (state: { [index: string]: any }, { key, value }: any) => {
       // eslint-disable-next-line no-prototype-builtins
       if (state.hasOwnProperty(key)) {
         state[key as keyof typeof state] = value
@@ -24,7 +25,7 @@ const settingsModule: Module<SettingState, RootState> = {
     }
   },
   actions: {
-    changeSetting({ commit }, data) {
+    changeSetting({ commit }: any, data: any) {
       commit('CHANGE_SETTING', data)
     }
   }

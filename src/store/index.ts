@@ -27,7 +27,7 @@ export default createStore<AllState>({
   ]
 })
 
-export const key: InjectionKey<Store<AllState>> = Symbol()
+export const key: InjectionKey<Store<AllState>> = Symbol('vue-store')
 
 export function useStore<T = AllState>() {
   return baseUseStore<T>(key)

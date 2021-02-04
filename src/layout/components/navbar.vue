@@ -11,8 +11,30 @@
       <template v-if="device !== 'mobile'">
         <search id="header-search" class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <screen-full id="screenfull" class="right-menu-item hover-effect" />
+        <el-tooltip content="Global Size" effect="dark" placement="bottom">
+          <size-select id="size-select" class="right-menu-item hover-effect" />
+        </el-tooltip>
       </template>
+
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <div class="avatar-wrapper">
+          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <router-link to="/profile/index">
+              <el-dropdown-item>Profile</el-dropdown-item>
+            </router-link>
+            <router-link to="/">
+              <el-dropdown-item>Dashboard</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item divided @click="logout">
+              <span style="display:block;">Log Out</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -25,7 +47,8 @@ import Hamburger from '@/components/Hamburger'
 import Breadcrumb from '@/components/Breadcrumb'
 import Search from '@/components/HeaderSearch'
 import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
+import ScreenFull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
 
 export default defineComponent({
   name: 'LayoutNavbar',
@@ -34,7 +57,8 @@ export default defineComponent({
     Breadcrumb,
     Search,
     ErrorLog,
-    Screenfull
+    ScreenFull,
+    SizeSelect
   },
   setup() {
     const store = useStore()
@@ -88,12 +112,9 @@ export default defineComponent({
     }
   }
 
-  .breadcrumb-container {
-    float: left;
-  }
-
   .right-menu {
     float: right;
+    display: flex;
     height: 100%;
     line-height: 50px;
 
@@ -101,13 +122,14 @@ export default defineComponent({
       outline: none;
     }
 
-    .right-menu-item {
-      display: inline-block;
+    ::v-deep(.right-menu-item) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 0 8px;
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
 
       &.hover-effect {
         cursor: pointer;
@@ -123,8 +145,9 @@ export default defineComponent({
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
+        height: 100%;
+        padding-top: 5px;
 
         .user-avatar {
           cursor: pointer;

@@ -3,6 +3,7 @@ import RootState from '@/store/interface'
 import AppState, { Size } from './interface'
 import Cookies from 'js-cookie'
 
+// const appModule: Module<AppState, RootState> = {
 const appModule: Module<AppState, RootState> = {
   namespaced: true,
   state: {
