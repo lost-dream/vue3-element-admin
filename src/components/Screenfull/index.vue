@@ -1,5 +1,5 @@
 <template>
-  <svg-icon :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="click" />
+  <svg-icon :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'" @click="click" />
 </template>
 
 <script lang="ts">
@@ -30,7 +30,8 @@ export default defineComponent({
     }
 
     function change() {
-      state.isFullScreen = screenfull.isEnabled
+      console.log('screenfull.isEnabled :>> ', screenfull.isFullscreen)
+      state.isFullScreen = screenfull.isFullscreen
     }
 
     function init() {

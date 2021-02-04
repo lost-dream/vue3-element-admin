@@ -9,6 +9,7 @@ import app from './modules/app'
 import permission from './modules/permission'
 import settings from './modules/settings'
 import errorLog from '@/components/ErrorLog'
+import tagsView from './modules/tagsView/index'
 
 export default createStore<AllState>({
   getters: getters,
@@ -18,7 +19,8 @@ export default createStore<AllState>({
     app,
     permission,
     settings,
-    errorLog
+    errorLog,
+    tagsView
   },
   plugins: [
     createPersistedState({

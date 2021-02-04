@@ -4,7 +4,7 @@
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
-        <!-- <tags-view v-if="needTagsView" /> -->
+        <tags-view v-if="needTagsView" />
       </div>
       <app-main />
       <!-- <right-panel v-if="showSettings">
@@ -19,6 +19,7 @@ import { computed, defineComponent, onBeforeMount, onBeforeUnmount, onMounted, w
 import AppMain from '@/layout/components/AppMain.vue'
 import Sidebar from '@/layout/components/Sidebar/index.vue'
 import Navbar from '@/layout/components/navbar.vue'
+import TagsView from '@/layout/components/TagsView/index.vue'
 import LayoutTags from '@/layout/components/tags.vue'
 import LayoutTheme from '@/layout/components/theme.vue'
 import { useStore } from '@/store'
@@ -30,7 +31,8 @@ export default defineComponent({
   components: {
     AppMain,
     Sidebar,
-    Navbar
+    Navbar,
+    TagsView
     // LayoutTags,
     // LayoutTheme
   },
