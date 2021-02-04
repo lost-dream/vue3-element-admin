@@ -207,7 +207,7 @@ export default defineComponent({
     display: inline-block;
     vertical-align: middle;
 
-    ::v-deep .el-input__inner {
+    ::v-deep(.el-input__inner) {
       border-radius: 0;
       border: 0;
       padding-left: 0;
