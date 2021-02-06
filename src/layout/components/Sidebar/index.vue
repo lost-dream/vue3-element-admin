@@ -33,7 +33,7 @@ export default defineComponent({
 
     const variables = computed(() => styles)
     const sidebar = computed(() => store.getters.sidebar)
-    const isCollapse = computed(() => sidebar.value.opened)
+    const isCollapse = computed(() => !sidebar.value.opened)
     const permissionRoutes = computed(() => store.getters.permissionRoutes)
 
     const activeMenu = computed(() => {
@@ -96,6 +96,61 @@ export default defineComponent({
     border: none;
     height: 100%;
     width: 100% !important;
+  }
+
+  &.hideSidebar {
+    width: 54px !important;
+
+    ::v-deep(.submenu-title-noDropdown) {
+      padding: 0 !important;
+      position: relative;
+
+      .el-tooltip {
+        padding: 0 !important;
+
+        ::v-deep(.svg-icon) {
+          margin-left: 20px;
+        }
+
+        .sub-el-icon {
+          margin-left: 19px;
+        }
+      }
+    }
+
+    .el-submenu {
+      overflow: hidden;
+
+      & > .el-submenu__title {
+        padding: 0 !important;
+
+        .svg-icon {
+          margin-left: 20px;
+        }
+
+        .sub-el-icon {
+          margin-left: 19px;
+        }
+
+        .el-submenu__icon-arrow {
+          display: none;
+        }
+      }
+    }
+
+    .el-menu--collapse {
+      .el-submenu {
+        & > .el-submenu__title {
+          & > span {
+            height: 0;
+            width: 0;
+            overflow: hidden;
+            visibility: hidden;
+            display: inline-block;
+          }
+        }
+      }
+    }
   }
 }
 </style>

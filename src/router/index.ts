@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout'
 
+import chartsRouter from './modules/charts'
+
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/redirect',
@@ -71,7 +73,8 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         meta: { title: 'Icons', icon: 'icon', noCache: true }
       }
     ]
-  }
+  },
+  ...chartsRouter
 ]
 
 const router = createRouter({

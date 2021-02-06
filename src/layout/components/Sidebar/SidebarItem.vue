@@ -15,6 +15,7 @@
           <item
             :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
             :title="onlyOneChild.meta.title"
+            :isNext="false"
           />
         </el-menu-item>
       </app-link>
@@ -22,7 +23,12 @@
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template #title>
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <item
+          v-if="item.meta"
+          :isNext="true"
+          :icon="item.meta && item.meta.icon"
+          :title="item.meta.title"
+        />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -44,7 +50,7 @@ import Item from './Item.vue'
 import AppLink from './Link.vue'
 
 export default defineComponent({
-  name: 'MenubarItem',
+  name: 'SidebarItem',
   props: {
     item: {
       type: Object,

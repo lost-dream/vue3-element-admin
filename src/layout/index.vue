@@ -1,27 +1,27 @@
 <template>
   <div :class="['app-wrapper', classObj]">
-    <sidebar />
+    <sidebar :class="classObj" />
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
-      <!-- <right-panel v-if="showSettings">
-      <settings />
-    </right-panel> -->
+      <right-panel v-if="showSettings">
+        <settings />
+      </right-panel>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onBeforeUnmount, onMounted, watch } from 'vue'
-import AppMain from '@/layout/components/AppMain.vue'
-import Sidebar from '@/layout/components/Sidebar/index.vue'
-import Navbar from '@/layout/components/navbar.vue'
-import TagsView from '@/layout/components/TagsView/index.vue'
-import LayoutTags from '@/layout/components/tags.vue'
-import LayoutTheme from '@/layout/components/theme.vue'
+import AppMain from './components/AppMain.vue'
+import Sidebar from './components/Sidebar/index.vue'
+import Navbar from './components/Navbar.vue'
+import TagsView from './components/TagsView/index.vue'
+import RightPanel from '@/components/RightPanel/index.vue'
+import Settings from './components/Settings.vue'
 import { useStore } from '@/store'
 import { throttle } from 'lodash'
 import { useRoute } from 'vue-router'
@@ -32,9 +32,9 @@ export default defineComponent({
     AppMain,
     Sidebar,
     Navbar,
-    TagsView
-    // LayoutTags,
-    // LayoutTheme
+    TagsView,
+    RightPanel,
+    Settings
   },
   setup() {
     const store = useStore()
@@ -52,7 +52,7 @@ export default defineComponent({
 
     const classObj = computed(() => {
       return {
-        hideSidebar: computedValue.sidebar.value.opened,
+        hideSidebar: !computedValue.sidebar.value.opened,
         openSidebar: computedValue.sidebar.value.opened,
         withoutAnimation: computedValue.sidebar.value.withoutAnimation,
         mobile: computedValue.device.value === 'mobile'
@@ -107,11 +107,16 @@ export default defineComponent({
 .app-wrapper {
   position: relative;
   @include cube();
-}
-.main-container {
-  min-height: 100%;
-  transition: margin-left 0.28s;
-  margin-left: $sideBarWidth;
-  position: relative;
+  .main-container {
+    min-height: 100%;
+    transition: margin-left 0.28s;
+    margin-left: $sideBarWidth;
+    position: relative;
+  }
+  &.hideSidebar {
+    .main-container {
+      margin-left: 54px;
+    }
+  }
 }
 </style>
