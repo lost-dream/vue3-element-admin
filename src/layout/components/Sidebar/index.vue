@@ -118,7 +118,7 @@ export default defineComponent({
       }
     }
 
-    .el-submenu {
+    ::v-deep(.el-submenu) {
       overflow: hidden;
 
       & > .el-submenu__title {
@@ -138,7 +138,7 @@ export default defineComponent({
       }
     }
 
-    .el-menu--collapse {
+    ::v-deep(.el-menu--collapse) {
       .el-submenu {
         & > .el-submenu__title {
           & > span {
@@ -148,8 +148,15 @@ export default defineComponent({
             visibility: hidden;
             display: inline-block;
           }
+          & > .el-submenu__icon-arrow {
+            display: none;
+          }
         }
       }
+    }
+
+    ::v-deep(.el-menu--collapse) .el-menu .el-submenu {
+      min-width: $sideBarWidth !important;
     }
   }
 }

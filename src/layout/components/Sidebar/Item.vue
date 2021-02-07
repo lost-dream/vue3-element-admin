@@ -3,9 +3,6 @@
     <i v-if="icon.includes('el-icon')" :class="['sub-el-icon', icon]"></i>
     <svg-icon v-else :icon-class="icon"></svg-icon>
   </template>
-  <span>
-    <template>{{ title }}</template>
-  </span>
 </template>
 <script lang="ts">
 export default {

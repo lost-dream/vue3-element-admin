@@ -17,6 +17,9 @@
             :title="onlyOneChild.meta.title"
             :isNext="false"
           />
+          <template #title>
+            <span v-if="onlyOneChild.meta.title"> {{ onlyOneChild.meta.title }}</span>
+          </template>
         </el-menu-item>
       </app-link>
     </template>
@@ -29,6 +32,7 @@
           :icon="item.meta && item.meta.icon"
           :title="item.meta.title"
         />
+        <span v-if="item.meta.title">{{ item.meta.title }}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"
