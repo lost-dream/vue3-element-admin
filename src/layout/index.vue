@@ -1,5 +1,10 @@
 <template>
   <div :class="['app-wrapper', classObj]">
+    <div
+      v-if="device === 'mobile' && sidebar.opened"
+      class="drawer-bg"
+      @click="handleClickOutside"
+    />
     <sidebar :class="classObj" />
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
@@ -65,7 +70,7 @@ export default defineComponent({
       () => route,
       () => {
         if (computedValue.device.value === 'mobile' && computedValue.sidebar.value.opened) {
-          store.dispatch('app/closeSidebar', { withoutAnimation: false })
+          store.dispatch('app/closeSideBar', { withoutAnimation: false })
         }
       }
     )
@@ -74,9 +79,13 @@ export default defineComponent({
       if (!document.hidden) {
         store.dispatch('app/toggleDevice', isMobile() ? 'mobile' : 'desktop')
         if (isMobile()) {
-          store.dispatch('app/closeSidebar', { withoutAnimation: true })
+          store.dispatch('app/closeSideBar', { withoutAnimation: true })
         }
       }
+    }
+
+    function handleClickOutside() {
+      store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
 
     onBeforeMount(() => {
@@ -97,7 +106,8 @@ export default defineComponent({
     return {
       ...computedValue,
       classObj,
-      isMobile
+      isMobile,
+      handleClickOutside
     }
   }
 })
@@ -117,6 +127,22 @@ export default defineComponent({
     .main-container {
       margin-left: 54px;
     }
+  }
+
+  &.mobile {
+    .main-container {
+      margin-left: 0px;
+    }
+  }
+
+  .drawer-bg {
+    background: #000;
+    opacity: 0.3;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
   }
 }
 </style>

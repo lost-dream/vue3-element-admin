@@ -9,6 +9,7 @@ const chartRoutes: Array<RouteRecordRaw> = [
       title: 'Chart',
       icon: 'chart'
     },
+    redirect: '/chart/keyboard',
     children: [
       {
         path: 'keyboard',

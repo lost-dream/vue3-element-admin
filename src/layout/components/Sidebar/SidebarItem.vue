@@ -11,6 +11,7 @@
         <el-menu-item
           :index="resolvePath(onlyOneChild.path)"
           :class="{ 'submenu-title-noDropdown': !isNest }"
+          @click="aaa"
         >
           <item
             :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
@@ -52,6 +53,7 @@ import { isExternal } from '@/utils/validate'
 import path from 'path'
 import Item from './Item.vue'
 import AppLink from './Link.vue'
+import { useStore } from '@/store'
 
 export default defineComponent({
   name: 'SidebarItem',
@@ -74,6 +76,7 @@ export default defineComponent({
     AppLink
   },
   setup(props) {
+    const store = useStore()
     const state = reactive({
       onlyOneChild: null
     })
@@ -112,10 +115,15 @@ export default defineComponent({
       return path.resolve(props.basePath, routePath)
     }
 
+    function aaa() {
+      store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    }
+
     return {
       ...toRefs(state),
       hasOneShowingChild,
-      resolvePath
+      resolvePath,
+      aaa
     }
   }
 })

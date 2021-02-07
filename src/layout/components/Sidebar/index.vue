@@ -159,5 +159,17 @@ export default defineComponent({
       min-width: $sideBarWidth !important;
     }
   }
+
+  // mobile responsive
+  &.mobile {
+    transition: transform 0.28s;
+    width: $sideBarWidth !important;
+
+    &.hideSidebar {
+      pointer-events: none;
+      transition-duration: 0.3s;
+      transform: translate3d(-$sideBarWidth, 0, 0);
+    }
+  }
 }
 </style>
