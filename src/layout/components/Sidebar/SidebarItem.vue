@@ -11,7 +11,7 @@
         <el-menu-item
           :index="resolvePath(onlyOneChild.path)"
           :class="{ 'submenu-title-noDropdown': !isNest }"
-          @click="aaa"
+          @click="handleCloseSidebar"
         >
           <item
             :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, reactive, toRefs, computed } from 'vue'
 import { isExternal } from '@/utils/validate'
 import path from 'path'
 import Item from './Item.vue'
@@ -80,6 +80,8 @@ export default defineComponent({
     const state = reactive({
       onlyOneChild: null
     })
+
+    const device = computed(() => store.state.app.device)
 
     function hasOneShowingChild(children = [], parent: any) {
       const showingChildren = children.filter(item => {
@@ -115,15 +117,18 @@ export default defineComponent({
       return path.resolve(props.basePath, routePath)
     }
 
-    function aaa() {
-      store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    function handleCloseSidebar() {
+      if (device.value === 'mobile') {
+        store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      }
     }
 
     return {
       ...toRefs(state),
       hasOneShowingChild,
       resolvePath,
-      aaa
+      handleCloseSidebar,
+      device
     }
   }
 })
