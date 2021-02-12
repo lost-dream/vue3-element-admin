@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.meta || (item.meta && !item.meta.hidden)">
+  <div v-if="!item.hidden">
     <template
       v-if="
         hasOneShowingChild(item.children, item) &&

@@ -11,13 +11,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useStore } from '@/store'
 
 export default defineComponent({
   name: 'LayoutContent',
   setup() {
+    const store = useStore()
+    const cachedViews = computed(() => store.getters.cachedViews)
     return {
-      cachedViews: [] // TODO 改成 store 中取 tagsView.cachedViews
+      cachedViews
     }
   }
 })

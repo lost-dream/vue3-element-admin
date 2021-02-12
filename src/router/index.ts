@@ -1,15 +1,29 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import {
+  createRouter,
+  createWebHashHistory,
+  RouteRecordRaw as BaseRouteRecordRaw
+} from 'vue-router'
 import Layout from '@/layout'
 
 import chartsRouter from './modules/charts'
+
+interface ExtendsParams {
+  /***
+   * if set true, will always show the root menu
+   * if not set alwaysShow, when item has more than one children route,
+   * it will becomes nested mode, otherwise not show the root menu */
+  alwaysShow?: boolean
+  /*** 是否在侧边栏中显示, 默认 false -- 不显示 */
+  hidden?: boolean
+}
+
+type RouteRecordRaw = ExtendsParams & BaseRouteRecordRaw
 
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/redirect',
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    hidden: true,
     children: [
       {
         path: '/redirect/:pathMatch(.*)*',
@@ -21,30 +35,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     name: 'Login',
-    meta: {
-      hidden: true
-    }
+    hidden: true
   },
   {
     path: '/auth-redirect',
     component: () => import('@/views/login/auth-redirect.vue'),
-    meta: {
-      hidden: true
-    }
+    hidden: true
   },
   {
     path: '/404',
     component: () => import('@/views/error-page/404.vue'),
-    meta: {
-      hidden: true
-    }
+    hidden: true
   },
   {
     path: '/401',
     component: () => import('@/views/error-page/401.vue'),
-    meta: {
-      hidden: true
-    }
+    hidden: true
   },
   {
     path: '/',

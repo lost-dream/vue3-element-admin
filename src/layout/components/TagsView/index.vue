@@ -114,6 +114,7 @@ export default {
     }
 
     function addTags() {
+      console.log('route.name :>> ', route.name)
       if (route.name) {
         store.dispatch('tagsView/addView', route)
       }
@@ -215,6 +216,7 @@ export default {
     watch(
       () => route.path,
       () => {
+        console.log('object :>> ', 'asdasdasdsadasasas')
         addTags()
         moveToCurrentTag()
       }
