@@ -4,6 +4,7 @@ import { configure, start, done } from 'nprogress'
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token fro
 import { ElMessage } from 'element-plus'
+import getPageTitle from './utils/getPageTitle'
 
 configure({ showSpinner: false })
 
@@ -11,6 +12,8 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async to => {
   start()
+
+  document.title = getPageTitle(to.meta.title)
 
   const hasToken = getToken()
 
